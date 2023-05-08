@@ -30,7 +30,7 @@ def deneme(inp_rho,inp_theta,cdst):
 
 def main(argv):
     
-    default_file = 'deneme.jpg'
+    default_file = '/Users/emred/Desktop/otonom/deneme.jpg'
     filename = argv[0] if len(argv) > 0 else default_file
     # Loads an image
     src = cv.imread(cv.samples.findFile(filename), cv.IMREAD_GRAYSCALE)
