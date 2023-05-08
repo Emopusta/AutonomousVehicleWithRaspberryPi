@@ -30,18 +30,6 @@ class ImageProcessing:
     def houghLineTransform(self, threshold):
        
         lines = cv.HoughLines(self.image, 1, np.pi / 180, threshold, None, 0, 0)
-    
-        if lines is not None:
-            for i in range(0, len(lines)):
-                rho = lines[i][0][0]
-                theta = lines[i][0][1]
-                a = math.cos(theta)
-                b = math.sin(theta)
-                x0 = a * rho
-                y0 = b * rho
-                pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
-                pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
-
         
         for i in lines:
             slope = i[0][0]
