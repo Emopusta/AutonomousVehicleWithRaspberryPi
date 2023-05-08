@@ -1,4 +1,4 @@
-from src.pinConfiguration.MotorPinConfiguration import  MotorPinConfiguration
+from src.pinConfiguration.MotorDriverPinConfiguration import  MotorDriverPinConfiguration
 from src.ImageProcessing import ImageProcessing
 import sys
 import cv2 as cv
