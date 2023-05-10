@@ -1,30 +1,50 @@
 import time
-
+import RPi.GPIO as GPIO
+from MotorDriverPinConfiguration import MotorDriverPinConfiguration as pin
 class PIDController:
-    integral = 0
-    kp = 0.5
-    ki = 0.2
-    kd = 0.1
-
-    def __init__(self, error) -> None:
-        self.error = error
-
-    def GetMotorParametersWithError(self, newError):
-
-        self.integral += newError
-        derivative = newError - self.error
-        self.error = newError
-
-        output = (self.kp * newError) + (self.ki * self.integral) + (self.kd * derivative)
+	integral = 0
+	kp = 0.5
+	ki = 0.2
+	kd = 0.1
 
 
-        left_speed = 0.5 + output
-        right_speed = 0.5 - output
-        # left_motor.forward(speed=left_speed)
-        # right_motor.forward(speed=right_speed)
+	def __init__(self, error, dutyCycle):
+		self.error = error
+		GPIO.setup(pin.en1, GPIO.OUT)
+		GPIO.setup(pin.in1, GPIO.OUT)
+		GPIO.setup(pin.in2, GPIO.OUT)
+		GPIO.setup(pin.en2, GPIO.OUT)
+		GPIO.setup(pin.in3, GPIO.OUT)
+		GPIO.setup(pin.in4, GPIO.OUT)
 
-      
-        time.sleep(0.1)
+		GPIO.output(pin.in1, GPIO.LOW)
+		GPIO.output(pin.in2, GPIO.LOW)
+		GPIO.output(pin.in3, GPIO.LOW)
+		GPIO.output(pin.in4, GPIO.LOW)
+		self.duty = dutyCycle
+		self.p1 = GPIO.PWM(pin.en1, 1000)
+		self.p2 = GPIO.PWM(pin.en2, 1000)
+
+		self.p1.start(self.duty)
+		self.p2.start(self.duty)
+
+
+
+
+
+	def GetMotorParametersWithError(self, newError):
+
+		self.integral += newError
+		derivative = newError - self.error
+		self.error = newError
+		output = (self.kp * newError) + (self.ki * self.integral) + (self.kd * derivative)
+
+
+		left_speed = 0.5 + output
+		right_speed = 0.5 - output
+		left_motor.forward(speed=left_speed)
+		right_motor.forward(speed=right_speed)
+		time.sleep(0.1)
 
 """
 import RPi.GPIO as GPIO
