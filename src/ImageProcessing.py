@@ -4,6 +4,7 @@ import math
 import picamera
 
 class ImageProcessing:
+	pastRhoAndThetaValues = [(0,0),(0,0),(0,0),(0,0),(0,0),(0,0)]
 	right_lines = []
 	left_lines = []
 	averaged_left = None
@@ -28,14 +29,24 @@ class ImageProcessing:
 		self.camera.capture(self.imagePath)
 		self.image = cv.imread(cv.samples.findFile(self.imagePath))
 
+	def saveShowImage(self):
+		cv.imwrite('/home/emopusta/Emre/AutonomousVehicleWithRaspberryPi/showImage.jpg', self.imageToShow)
+
 	def BGRtoGrayScale(self):
 		self.image = cv.cvtColor(self.image, cv.COLOR_BGR2GRAY)
 
 	def ROI(self, x1, y1, x2, y2):
 		self.image = self.image[x1:y1,x2:y2]
 
-	def grayScaleToBGRShowImage(self):
+	def prepareDisplayImage(self):
 		self.imageToShow = cv.cvtColor(self.image, cv.COLOR_GRAY2BGR)
+		cv.circle(self.imageToShow,self.staticMiddlePoint,10,(0,255,0),-1)
+		cv.line(self.imageToShow, self.intersectionCoordinatesOfHoughLines, self.staticBottomPoint, (0, 255, 0), 2)
+		self.drawhoughLines(self.averaged_right[0],self.averaged_right[1])
+		self.drawhoughLines(self.averaged_left[0],self.averaged_left[1])
+		self.saveShowImage()
+
+
 
 	def houghLineTransform(self, threshold):
 		lines = cv.HoughLines(self.image, 1, np.pi / 180, threshold, None, 0, 0)
@@ -69,7 +80,6 @@ class ImageProcessing:
 
 	def setStaticMiddlePoint(self, x, y):
 		self.staticMiddlePoint = (x,y)
-		cv.circle(self.imageToShow,self.staticMiddlePoint,10,(0,255,0),-1)
 
 	def findLineToTrack(self):
 		theta1 = self.averaged_right[1]
@@ -82,12 +92,11 @@ class ImageProcessing:
 		x, y = map(int, intersection)
 		self.intersectionCoordinatesOfHoughLines = (x,y)
 		self.staticBottomPoint = (200,440)
-		cv.line(self.imageToShow, (x, y), self.staticBottomPoint, (0, 255, 0), 2)
 
 	def findDistanceBetweenStaticMiddlePointAndTrackLine(self):
 		p1 = np.array([self.intersectionCoordinatesOfHoughLines[0], self.intersectionCoordinatesOfHoughLines[1]])
 		p2 = np.array([self.staticBottomPoint[0], self.staticBottomPoint[1]])
 		p3 = np.array([self.staticMiddlePoint[0],self.staticMiddlePoint[1]])
 		d=np.cross(p2-p1,p3-p1)/np.linalg.norm(p2-p1)
-		print(d)
+		print("distance between static point and track -> ", d)
 		self.distanceBetweenStaticMiddlePointAndTrackLine = d

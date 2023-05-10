@@ -1,5 +1,5 @@
 class MotorDriverPinConfiguration:
-	
+
 	en1 = 35
 	in1 = 37
 	in2 = 33

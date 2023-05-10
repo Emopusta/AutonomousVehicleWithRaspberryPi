@@ -1,4 +1,4 @@
-from UltrasonicSensorPinConfiguration import UltrasonicSensorPinConfiguration as pin
+from pinConfiguration.UltrasonicSensorPinConfiguration import UltrasonicSensorPinConfiguration as pin
 import RPi.GPIO as GPIO
 import time
 
@@ -25,4 +25,5 @@ class UltrasonicSensor:
 		ptt = echoStopTime - echoStartTime
 		distance = 1234.367 * ptt * 5280 * 12 / 3600
 		self.distance = distance
+		print("Ultrasonic distance -> ", distance)
 		return distance
