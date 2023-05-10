@@ -5,9 +5,9 @@ from simple_pid import PID
 
 class PIDController:
 	integral = 0
-	kp = 0.5
-	ki = 0.2
-	kd = 0.5
+	kp = 0.3
+	ki = 0.05
+	kd = 0.3
 	pid = PID(1, 0.1, 0.05, setpoint=0)
 
 
@@ -45,9 +45,9 @@ class PIDController:
 			GPIO.output(pin.in1, GPIO.LOW)
 			GPIO.output(pin.in2, GPIO.LOW)
 			speed = abs(speed)
-		if speed > 30:
-			speed = 30
-			self.integral=0
+		if speed > 50:
+			speed = 50
+
 
 		print("left_side -> ", speed)
 		self.p1.ChangeDutyCycle(abs(speed))
@@ -63,9 +63,9 @@ class PIDController:
 			GPIO.output(pin.in3, GPIO.LOW)
 			GPIO.output(pin.in4, GPIO.LOW)
 			speed = abs(speed)
-		if speed > 30:
-			speed = 30
-			self.integral = 0
+		if speed > 50:
+			speed = 50
+
 		print("right side -> ", abs(speed))
 
 		self.p2.ChangeDutyCycle(abs(speed))
@@ -79,8 +79,8 @@ class PIDController:
 		output = (self.kp * newError) + (self.ki * self.integral) + (self.kd * derivative)
 
 		print("output of the PID -> ", output)
-		left_speed = 0.5 + output
-		right_speed = 0.5 - output
+		left_speed =  output
+		right_speed =  output*-1
 		print(left_speed, right_speed)
 		self.controlLeftSide(speed=left_speed)
 		self.controlRightSide(speed=right_speed)
