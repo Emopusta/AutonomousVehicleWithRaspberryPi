@@ -1,29 +1,34 @@
 from src.pinConfiguration.MotorDriverPinConfiguration import  MotorDriverPinConfiguration
 from src.ImageProcessing import ImageProcessing
+from src.UltrasonicSensor import UltrasonicSensor
 import sys
 import cv2 as cv
 
 def main(argv):
 
     imageProcessing = ImageProcessing("deneme.jpg")
+    ultrasonicSensor = UltrasonicSensor()
 
-    imageProcessing.BGRtoGrayScale()
+    while True:
+        ultrasonicSensor.calculateDistance()
 
-    imageProcessing.ROI(500,1000,500,1000)
+        imageProcessing.BGRtoGrayScale()
 
-    imageProcessing.cannyEdgeDetection(150, 150)
+        imageProcessing.ROI(500,1000,500,1000)
 
-    imageProcessing.grayScaleToBGRShowImage()
+        imageProcessing.cannyEdgeDetection(150, 150)
 
-    imageProcessing.houghLineTransform(threshold=50)
+        imageProcessing.grayScaleToBGRShowImage()
 
-    imageProcessing.findLineToTrack()
+        imageProcessing.houghLineTransform(threshold=50)
 
-    imageProcessing.setStaticMiddlePoint(250,250)
+        imageProcessing.findLineToTrack()
 
-    imageProcessing.findDistanceBetweenStaticMiddlePointAndTrackLine()
+        imageProcessing.setStaticMiddlePoint(250,250)
 
-    imageProcessing.showImage()
+        imageProcessing.findDistanceBetweenStaticMiddlePointAndTrackLine()
+
+        imageProcessing.showImage()
 
     
     cv.waitKey()

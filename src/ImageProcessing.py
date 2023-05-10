@@ -84,5 +84,6 @@ class ImageProcessing:
         p3 = np.array([self.staticMiddlePoint[0],self.staticMiddlePoint[1]])
 
         d=np.cross(p2-p1,p3-p1)/np.linalg.norm(p2-p1)
+        print(d)
         self.distanceBetweenStaticMiddlePointAndTrackLine = d
         

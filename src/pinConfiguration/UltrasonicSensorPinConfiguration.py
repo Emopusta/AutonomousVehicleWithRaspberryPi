@@ -1,4 +1,10 @@
-
 class UltrasonicSensorPinConfiguration:
 
-    pin = 23
+    echoPin = 31
+    triggerPin = 29
+
+       
+
+
+    
+   
