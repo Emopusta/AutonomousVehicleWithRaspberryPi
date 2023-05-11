@@ -12,9 +12,9 @@ class UltrasonicSensor:
 	def calculateDistance(self):
 
 		GPIO.output(pin.triggerPin, 0)
-		time.sleep(.1)
+		time.sleep(.002)
 		GPIO.output(pin.triggerPin, 1)
-		time.sleep(.1)
+		time.sleep(.002)
 		GPIO.output(pin.triggerPin, 0)
 		while GPIO.input(pin.echoPin) == 0:
 			pass

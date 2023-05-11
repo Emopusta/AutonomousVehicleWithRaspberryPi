@@ -2,6 +2,7 @@ import cv2 as cv
 import numpy as np
 import math
 import picamera
+import time
 
 class ImageProcessing:
 	pastRhoAndThetaValues = [(0,0),(0,0),(0,0),(0,0),(0,0),(0,0)]
@@ -21,12 +22,13 @@ class ImageProcessing:
 		self.image = cv.imread(cv.samples.findFile(imagePath))
 		self.camera = picamera.PiCamera()
 		self.camera.resolution = (400,300)
-		self.camera.exposure_mode = 'auto'
+		self.camera.exposure_mode="auto"
 		self.camera.capture(self.imagePath)
+
 
 
 	def captureImage(self):
-		self.camera.capture(self.imagePath)
+		self.camera.capture(self.imagePath, use_video_port=True)
 		self.image = cv.imread(cv.samples.findFile(self.imagePath))
 
 	def saveShowImage(self):
