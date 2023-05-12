@@ -1,9 +1,9 @@
 class MotorDriverPinConfiguration:
 
-	en1 = 35
-	in1 = 37
+	en1 = 37
+	in1 = 35
 	in2 = 33
 
-	en2 = 40
-	in3 = 38
-	in4 = 36
+	en2 = 36
+	in3 = 40
+	in4 = 38

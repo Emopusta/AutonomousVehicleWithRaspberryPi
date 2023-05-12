@@ -16,7 +16,7 @@ class ImageProcessing:
 	staticBottomPoint = None
 	distanceBetweenStaticMiddlePointAndTrackLine = None
 	camera = None
-
+	lines = None
 	def __init__(self, imagePath):
 		self.imagePath = imagePath
 		self.image = cv.imread(cv.samples.findFile(imagePath))
@@ -42,30 +42,57 @@ class ImageProcessing:
 
 	def prepareDisplayImage(self):
 		self.imageToShow = cv.cvtColor(self.image, cv.COLOR_GRAY2BGR)
-		cv.circle(self.imageToShow,self.staticMiddlePoint,10,(0,255,0),-1)
+		cv.circle(self.imageToShow,self.staticMiddlePoint,5,(0,255,0),-1)
 		cv.line(self.imageToShow, self.intersectionCoordinatesOfHoughLines, self.staticBottomPoint, (0, 255, 0), 2)
-		self.drawhoughLines(self.averaged_right[0],self.averaged_right[1])
-		self.drawhoughLines(self.averaged_left[0],self.averaged_left[1])
+		for i in self.lines:
+			self.drawHoughLinesRaw(i[0][0],i[0][1])
+		self.drawHoughLines(self.averaged_right[0],self.averaged_right[1])
+		self.drawHoughLines(self.averaged_left[0],self.averaged_left[1])
 		self.saveShowImage()
 
 
 
-	def houghLineTransform(self, threshold):
-		lines = cv.HoughLines(self.image, 1, np.pi / 180, threshold, None, 0, 0)
+	def houghLineTransform(self):
+		lines = cv.HoughLines(self.image, 1, np.pi / 180, 50)
+		self.lines = lines
+		right_flag=False
+		left_flag=False
+		
 		for i in lines:
 			slope = i[0][0]
 			intercept = i[0][1]
-			if slope<0:
-				self.right_lines.append((slope,intercept))
-			else:
-				self.left_lines.append((slope,intercept))
+			
+			if intercept < 1.39 or intercept > 1.74:
+				if intercept<-0.05 or intercept>0.05:
+					if slope<200:
+						right_flag = True
+						self.right_lines.append((slope,intercept))
+					else:
+						left_flag = True
+						self.left_lines.append((slope,intercept))
+			else :
+				print("yatay")
+		if right_flag and left_flag:
+			self.averaged_right = np.average(self.right_lines, axis=0)
+			self.averaged_left = np.average(self.left_lines, axis=0)
+			self.drawHoughLines(self.averaged_right[0],self.averaged_right[1])
+			self.drawHoughLines(self.averaged_left[0],self.averaged_left[1])
 
-		self.averaged_right = np.average(self.right_lines, axis=0)
-		self.averaged_left =np.average(self.left_lines, axis=0)
-		self.drawhoughLines(self.averaged_right[0],self.averaged_right[1])
-		self.drawhoughLines(self.averaged_left[0],self.averaged_left[1])
+		elif left_flag:
+			self.averaged_left =np.average(self.left_lines, axis=0)
+			self.drawHoughLines(self.averaged_left[0],self.averaged_left[1])
+			self.averaged_right = [400,0]
+			self.drawHoughLines(self.averaged_right[0],self.averaged_right[1])
 
-	def drawhoughLines(self,rho,theta):
+		elif right_flag:
+			self.averaged_right = np.average(self.right_lines, axis=0)
+			self.drawHoughLines(self.averaged_right[0],self.averaged_right[1])
+			self.averaged_left = [0,0]
+			self.drawHoughLines(self.averaged_left[0],self.averaged_left[1])
+		else:
+			print("naneyi yedin")
+		
+	def drawHoughLines(self,rho,theta):
 		a = math.cos(theta)
 		b = math.sin(theta)
 		x0 = a * rho
@@ -73,6 +100,14 @@ class ImageProcessing:
 		pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
 		pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
 		cv.line(self.imageToShow, pt1, pt2, (255,0,0), 3, cv.LINE_AA,)
+	def drawHoughLinesRaw(self,rho,theta):
+		a = math.cos(theta)
+		b = math.sin(theta)
+		x0 = a * rho
+		y0 = b * rho
+		pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
+		pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
+		cv.line(self.imageToShow, pt1, pt2, (0,0,255), 3, cv.LINE_AA,)
 
 	def showImage(self):
 		cv.imshow("deneme", self.imageToShow)

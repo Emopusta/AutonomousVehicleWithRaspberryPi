@@ -11,13 +11,13 @@ import time
 
 def main(argv):
 	GPIO.setmode(GPIO.BOARD)
-	
+
 	imageProcessing = ImageProcessing("/home/emopusta/Emre/AutonomousVehicleWithRaspberryPi/deneme.jpg")
 	ultrasonicSensor = UltrasonicSensor()
 	pidController = PIDController(0, 20.0)
-
+	
 	imageProcessing.setStaticMiddlePoint(200,150)
-
+	
 	while True:
 		try:
 			startTime = time.time()
@@ -25,12 +25,12 @@ def main(argv):
 			if ultrasonicSensor.calculateDistance() <10:
 				break
 			endUltrasonic = time.time()
-
+			
 			startCaptureTime = time.time()
 			imageProcessing.captureImage()
 			endCaptureTime = time.time()
-
-			#imageProcessing.ROI(100,500,0,500)
+			
+			imageProcessing.ROI(50,210,0,400)
 			
 			startConvertTime = time.time()
 			imageProcessing.BGRtoGrayScale()
@@ -41,7 +41,7 @@ def main(argv):
 			endCannyTime = time.time()
 			
 			startHoughTime = time.time()
-			imageProcessing.houghLineTransform(threshold=50)
+			imageProcessing.houghLineTransform()
 			endHoughTime = time.time()
 
 			startTrackTime = time.time()
@@ -71,8 +71,10 @@ def main(argv):
 		except KeyboardInterrupt:
 			GPIO.cleanup()
 			return 0
+
 		#except:
 		#	print("cizgi yok")
+
 	print("program sonlandi")
 	cv.waitKey()
 	return 0
