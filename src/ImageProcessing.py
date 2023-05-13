@@ -20,7 +20,8 @@ class ImageProcessing:
 	kmeans_lines = None
 	lines = None
 	total = None
-
+	isClustered = False
+	
 	def __init__(self, imagePath):
 		self.imagePath = imagePath
 		self.image = cv.imread(cv.samples.findFile(imagePath))
@@ -47,7 +48,13 @@ class ImageProcessing:
 	def prepareDisplayImage(self):
 		self.imageToShow = cv.cvtColor(self.image, cv.COLOR_GRAY2BGR)
 		cv.circle(self.imageToShow,self.staticMiddlePoint,5,(0,255,0),-1)
-		#cv.line(self.imageToShow, self.intersectionCoordinatesOfHoughLines, self.staticBottomPoint, (0, 255, 0), 2)
+		if not self.isClustered:
+			cv.line(self.imageToShow, self.intersection, self.staticBottomPoint, (0, 255, 0), 2)
+			
+		else:
+			self.isClustered = False
+			self.drawHoughLinesPurple(self.kmeans_lines[0], self.kmeans_lines[1])
+
 		for i in self.lines:
 			self.drawHoughLinesRaw(i[0][0],i[0][1])
 		self.drawHoughLines(self.averaged_right[0],self.averaged_right[1])
@@ -94,11 +101,15 @@ class ImageProcessing:
 
 
 	def findLineToTrack(self):
+		print("------------******************-----------",self.averaged_left,  self.averaged_right)
 		if self.averaged_left[0]>0 and self.averaged_right[0]>0 or self.averaged_left[0]<0 and self.averaged_right[0]<0:
 			self.kmeans_lines = np.average(self.total, axis=0)
+			print("----------------------->", self.kmeans_lines)
 			self.findDistanceWithRhoThetaPoint(self.kmeans_lines[0], self.kmeans_lines[1])
+			self.isClustered = True
 		else:
 			self.findIntersection()
+			print("asdasdasdasdasdasd*************************")
 			cv.line(self.imageToShow, self.intersection, (200,300), (0,255,255), 3, cv.LINE_AA,)
 			self.findDistanceWithPointPointPoint()
 
@@ -132,6 +143,15 @@ class ImageProcessing:
 		pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
 		cv.line(self.imageToShow, pt1, pt2, (0,0,255), 3, cv.LINE_AA,)
 
+	def drawHoughLinesPurple(self,rho,theta):
+		a = math.cos(theta)
+		b = math.sin(theta)
+		x0 = a * rho
+		y0 = b * rho
+		pt1 = (int(x0 + 1000*(-b)), int(y0 + 1000*(a)))
+		pt2 = (int(x0 - 1000*(-b)), int(y0 - 1000*(a)))
+		cv.line(self.imageToShow, pt1, pt2, (255,255,0), 3, cv.LINE_AA,)
+
 	def showImage(self):
 		cv.imshow("deneme", self.imageToShow)
 
@@ -139,12 +159,14 @@ class ImageProcessing:
 		self.image = cv.Canny(self.image, threshold1, threshold2, None, 3)
 
 	def setStaticMiddlePoint(self, x, y):
-		self.staticMiddlePoint = (x,y)
-
+		self.staticMiddlePoint = (x, y)
+	def setStaticBottomPoint(self, x, y):
+		self.staticBottomPoint= (x, y)
 	def findDistanceWithRhoThetaPoint(self, rho, theta):
 		x = self.staticMiddlePoint[0]
 		y = self.staticMiddlePoint[1]
 		self.distanceBetweenStaticMiddlePointAndTrackLine = abs((x - rho * math.cos(theta)) * math.sin(theta) - (y - rho * math.sin(theta)) * math.cos(theta))
+		print("run RTP")
 		print("distance between static point and track -> ", self.distanceBetweenStaticMiddlePointAndTrackLine)
 
 	def findDistanceWithPointPointPoint(self):
@@ -152,5 +174,6 @@ class ImageProcessing:
 		p2 = np.array([self.staticBottomPoint[0], self.staticBottomPoint[1]])
 		p3 = np.array([self.staticMiddlePoint[0],self.staticMiddlePoint[1]])
 		d=np.cross(p2-p1,p3-p1)/np.linalg.norm(p2-p1)
+		print("run PPP")
 		print("distance between static point and track -> ", d)
 		self.distanceBetweenStaticMiddlePointAndTrackLine = d

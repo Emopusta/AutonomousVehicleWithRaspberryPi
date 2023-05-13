@@ -16,8 +16,8 @@ def main(argv):
 	ultrasonicSensor = UltrasonicSensor()
 	pidController = PIDController(0, 20.0)
 	
-	imageProcessing.setStaticMiddlePoint(200,150)
-	
+	imageProcessing.setStaticMiddlePoint(200,100)
+	imageProcessing.setStaticBottomPoint(200,0)
 	while True:
 		try:
 			startTime = time.time()
@@ -27,12 +27,11 @@ def main(argv):
 
 			imageProcessing.captureImage()
 
-			imageProcessing.ROI(50,210,0,400)
+			#imageProcessing.ROI(50,210,0,400)
 
 			imageProcessing.BGRtoGrayScale()
 
 			imageProcessing.cannyEdgeDetection(150,150)
-
 			
 
 
@@ -40,9 +39,10 @@ def main(argv):
 
 			imageProcessing.findLineToTrack()
 
-			imageProcessing.prepareDisplayImage()
 
 			pidController.getMotorParametersWithError(imageProcessing.distanceBetweenStaticMiddlePointAndTrackLine)
+
+			imageProcessing.prepareDisplayImage()
 
 			endTime = time.time()
 
