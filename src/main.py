@@ -24,47 +24,29 @@ def main(argv):
 
 			if ultrasonicSensor.calculateDistance() <10:
 				break
-			endUltrasonic = time.time()
-			
-			startCaptureTime = time.time()
+
 			imageProcessing.captureImage()
-			endCaptureTime = time.time()
-			
+
 			imageProcessing.ROI(50,210,0,400)
-			
-			startConvertTime = time.time()
+
 			imageProcessing.BGRtoGrayScale()
-			endConvertTime = time.time()
 
-			startCannyTime = time.time()
 			imageProcessing.cannyEdgeDetection(150,150)
-			endCannyTime = time.time()
+
 			
-			startHoughTime = time.time()
+
+
 			imageProcessing.houghLineTransform()
-			endHoughTime = time.time()
 
-			startTrackTime = time.time()
 			imageProcessing.findLineToTrack()
-			endTrackTime = time.time()
-
-			startPointToTrackTime = time.time()
-			imageProcessing.findDistanceBetweenStaticMiddlePointAndTrackLine()
-			endPointToTrackTime = time.time()
 
 			imageProcessing.prepareDisplayImage()
 
-
 			pidController.getMotorParametersWithError(imageProcessing.distanceBetweenStaticMiddlePointAndTrackLine)
+
 			endTime = time.time()
-			
-			print("ultrasonic = ", endUltrasonic- startTime)
-			print("image capture time = ", endCaptureTime-startCaptureTime)
-			print("image convert grayscale time = ", endConvertTime - startConvertTime)
-			print("canny edge time = " , endCannyTime - startCannyTime)
-			print("hough lines time = ", endHoughTime - startHoughTime)
-			print("Track time = ", endTrackTime - startTrackTime)
-			print("Error find time = ", endPointToTrackTime - startPointToTrackTime)
+
+
 			print("cycle time = ", endTime-startTime)
 			print("*******************************")
 
