@@ -17,7 +17,7 @@ def main(argv):
 	pidController = PIDController(0, 20.0)
 	
 	imageProcessing.setStaticMiddlePoint(200,100)
-	imageProcessing.setStaticBottomPoint(200,0)
+	imageProcessing.setStaticBottomPoint(200,300)
 	while True:
 		try:
 			startTime = time.time()
