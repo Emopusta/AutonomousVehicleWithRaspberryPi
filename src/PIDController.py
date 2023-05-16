@@ -4,9 +4,9 @@ import time
 from simple_pid import PID
 
 class PIDController:
-	kp = 4
+	kp = 10
 	ki = 0.1
-	kd = 1
+	kd = 0.1
 	pid = PID(0.5, 0.1, 0.05, setpoint=0)
 	integral = 0
 

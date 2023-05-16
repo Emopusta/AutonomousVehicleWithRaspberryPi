@@ -27,15 +27,15 @@ def main(argv):
 
 			imageProcessing.captureImage()
 
-			#imageProcessing.ROI(50,210,0,400)
+			imageProcessing.ROI(100,400,0,395)
 
 			imageProcessing.BGRtoGrayScale()
 
-			imageProcessing.cannyEdgeDetection(150,150)
+			imageProcessing.cannyEdgeDetection(100,100)
 			
 
 
-			imageProcessing.houghLineTransform()
+			imageProcessing.houghLineTransform(40)
 
 			imageProcessing.findLineToTrack()
 
@@ -54,8 +54,8 @@ def main(argv):
 			GPIO.cleanup()
 			return 0
 
-		#except:
-		#	print("cizgi yok")
+		except:
+			print("cizgi yok")
 
 	print("program sonlandi")
 	cv.waitKey()
