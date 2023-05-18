@@ -219,8 +219,8 @@ class ImageProcessing:
 		xD=int((150-n)/m)
 		print(xD)
 		if xD<self.staticMiddlePoint[1]:
-			self.distanceBetweenStaticMiddlePointAndTrackLine = abs(distance)/2 *-1
-		else:
 			self.distanceBetweenStaticMiddlePointAndTrackLine = abs(distance)/2 
+		else:
+			self.distanceBetweenStaticMiddlePointAndTrackLine = abs(distance)/2 *-1 
 
 		print("distance = ", distance)

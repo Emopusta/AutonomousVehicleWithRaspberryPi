@@ -27,11 +27,11 @@ def main(argv):
 
 			imageProcessing.captureImage()
 
-			imageProcessing.ROI(100,400,0,395)
+			imageProcessing.ROI(100,400,20,380)
 
 			imageProcessing.BGRtoGrayScale()
 
-			imageProcessing.cannyEdgeDetection(100,100)
+			imageProcessing.cannyEdgeDetection(150,150)
 			
 
 

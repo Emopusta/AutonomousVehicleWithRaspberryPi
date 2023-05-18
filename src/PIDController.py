@@ -4,8 +4,8 @@ import time
 from simple_pid import PID
 
 class PIDController:
-	kp = 10
-	ki = 0.1
+	kp =7
+	#ki = 0.1
 	kd = 0.1
 	pid = PID(0.5, 0.1, 0.05, setpoint=0)
 	integral = 0
@@ -73,19 +73,17 @@ class PIDController:
 
 	def getMotorParametersWithError(self, newError):
 
-		
-		
 		derivative = newError - self.error
 		self.error = newError
-		output = (self.kp * newError) + (self.ki * self.integral) + (self.kd * derivative)
+		output = (self.kp * newError) + (self.kd * derivative)
 
 		
 		print("output of the PID -> ", output)
 		
 		left_speed =  0.5 + output
 		right_speed =  0.5 - output
-		left_speed = (left_speed/10) + 25
-		right_speed = (right_speed/10)+ 25
+		left_speed = (left_speed/10) + 23
+		right_speed = (right_speed/10)+ 23
 		print(left_speed, right_speed)
 		self.controlLeftSide(speed=left_speed)
 		self.controlRightSide(speed=right_speed)
