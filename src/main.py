@@ -27,7 +27,7 @@ def main(argv):
 
 			imageProcessing.captureImage()
 
-			imageProcessing.ROI(100,400,20,380)
+			#imageProcessing.ROI(100,400,20,380)
 
 			imageProcessing.BGRtoGrayScale()
 
@@ -35,7 +35,7 @@ def main(argv):
 			
 
 
-			imageProcessing.houghLineTransform(40)
+			imageProcessing.houghLineTransform(30)
 
 			imageProcessing.findLineToTrack()
 

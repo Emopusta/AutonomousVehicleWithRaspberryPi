@@ -27,7 +27,7 @@ class ImageProcessing:
 		self.imagePath = imagePath
 		self.image = cv.imread(cv.samples.findFile(imagePath))
 		self.camera = picamera.PiCamera()
-		self.camera.resolution = (400,300)
+		self.camera.resolution = (120,90)
 		self.camera.exposure_mode="auto"
 		self.camera.capture(self.imagePath)
 
