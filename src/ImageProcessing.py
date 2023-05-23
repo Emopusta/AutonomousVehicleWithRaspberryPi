@@ -23,6 +23,7 @@ class ImageProcessing:
 	isClustered = False
 	pt1 = None
 	pt2 = None
+
 	def __init__(self, imagePath):
 		self.imagePath = imagePath
 		self.image = cv.imread(cv.samples.findFile(imagePath))
@@ -36,6 +37,13 @@ class ImageProcessing:
 	def captureImage(self):
 		self.camera.capture(self.imagePath, use_video_port=True)
 		self.image = cv.imread(cv.samples.findFile(self.imagePath))
+		"""
+		lower = np.array([0,0,150])
+		upper = np.array([180,30,255])
+		hsv = cv.cvtColor(self.image, cv.COLOR_BGR2HSV)
+		self.image = cv.inRange(hsv, lower, upper)
+		"""
+
 
 	def saveShowImage(self):
 		cv.imwrite('/home/emopusta/Emre/AutonomousVehicleWithRaspberryPi/showImage.jpg', self.imageToShow)

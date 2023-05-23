@@ -54,8 +54,8 @@ def main(argv):
 			GPIO.cleanup()
 			return 0
 
-		except:
-			print("cizgi yok")
+		#except:
+		#	print("cizgi yok")
 
 	print("program sonlandi")
 	cv.waitKey()
