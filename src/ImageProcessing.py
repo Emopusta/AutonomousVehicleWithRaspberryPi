@@ -28,7 +28,7 @@ class ImageProcessing:
 		self.imagePath = imagePath
 		self.image = cv.imread(cv.samples.findFile(imagePath))
 		self.camera = picamera.PiCamera()
-		self.camera.resolution = (120,90)
+		self.camera.resolution = (400,300)
 		self.camera.exposure_mode="auto"
 		self.camera.capture(self.imagePath)
 
@@ -49,6 +49,7 @@ class ImageProcessing:
 		cv.imwrite('/home/emopusta/Emre/AutonomousVehicleWithRaspberryPi/showImage.jpg', self.imageToShow)
 
 	def BGRtoGrayScale(self):
+		
 		self.image = cv.cvtColor(self.image, cv.COLOR_BGR2GRAY)
 
 	def ROI(self, x1, y1, x2, y2):

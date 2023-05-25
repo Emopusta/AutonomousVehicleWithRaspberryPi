@@ -11,23 +11,25 @@ import time
 
 def main(argv):
 	GPIO.setmode(GPIO.BOARD)
-
+	print("asdsadsadasd")
 	imageProcessing = ImageProcessing("/home/emopusta/Emre/AutonomousVehicleWithRaspberryPi/deneme.jpg")
 	ultrasonicSensor = UltrasonicSensor()
 	pidController = PIDController(0, 20.0)
 	
-	imageProcessing.setStaticMiddlePoint(200,100)
+	imageProcessing.setStaticMiddlePoint(200,150)
 	imageProcessing.setStaticBottomPoint(200,300)
 	while True:
 		try:
 			startTime = time.time()
 
+			"""
 			if ultrasonicSensor.calculateDistance() <10:
 				break
-
+			"""
+			
 			imageProcessing.captureImage()
 
-			#imageProcessing.ROI(100,400,20,380)
+			imageProcessing.ROI(100,400,20,380)
 
 			imageProcessing.BGRtoGrayScale()
 
@@ -35,14 +37,14 @@ def main(argv):
 			
 
 
-			imageProcessing.houghLineTransform(30)
+			imageProcessing.houghLineTransform(40)
 
 			imageProcessing.findLineToTrack()
 
 
 			pidController.getMotorParametersWithError(imageProcessing.distanceBetweenStaticMiddlePointAndTrackLine)
 
-			imageProcessing.prepareDisplayImage()
+			#imageProcessing.prepareDisplayImage()
 
 			endTime = time.time()
 
