@@ -63,8 +63,12 @@ class ImageProcessing:
 		hsv = cv.cvtColor(self.image_gauss, cv.COLOR_BGR2HSV)
 		self.image_hsv = cv.inRange(hsv, lower, upper)
 
-		self.saveImage(self.image_hsv, "image_right_hsv")
+		self.saveImage(self.image_hsv, "image_hsv")
 
+
+	def cannyEdgeDetection(self, threshold1 = 60, threshold2 = 150):
+		self.image_canny = cv.Canny(self.image_hsv,threshold1, threshold2)
+		self.saveImage(self.image_canny, "image_canny")
 
 
 
