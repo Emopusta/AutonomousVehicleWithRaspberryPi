@@ -3,7 +3,7 @@ from pinConfiguration.MotorDriverPinConfiguration import  MotorDriverPinConfigur
 from ImageProcessing import ImageProcessing
 from pinConfiguration.UltrasonicSensorPinConfiguration import UltrasonicSensorPinConfiguration as Upin
 from UltrasonicSensor import UltrasonicSensor
-from PIDController import PIDController
+from PDController import PDController
 import sys
 import cv2 as cv
 import RPi.GPIO as GPIO
@@ -14,17 +14,18 @@ def main(argv):
 
 	imageProcessing = ImageProcessing()
 	ultrasonicSensor = UltrasonicSensor()
-	pidController = PIDController(0, 20.0)
+	pdController = PDController(0, 20.0)
 
-	imageProcessing.setStaticMiddlePoint(200,100)
-	imageProcessing.setStaticBottomPoint(200,300)
+	#imageProcessing.setStaticMiddlePoint(200,100)
+	#imageProcessing.setStaticBottomPoint(200,300)
 	while True:
 		try:
 			startTime = time.time()
 
+			"""
 			if ultrasonicSensor.calculateDistance() <10:
 				break
-
+			"""
 			imageProcessing.CaptureImage()
 
 			imageProcessing.GaussFilter()

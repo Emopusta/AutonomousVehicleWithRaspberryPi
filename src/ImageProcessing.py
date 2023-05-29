@@ -1,3 +1,5 @@
+import cv2 as cv
+import numpy as np
 import math
 import picamera
 import picamera.array
@@ -54,12 +56,12 @@ class ImageProcessing:
 
 	def GaussFilter(self):
 
-		self.image_gauss = cv.blur(self.image_right, (5,5))
+		self.image_gauss = cv.blur(self.image, (5,5))
 		self.SaveImage(self.image_gauss, "image_gauss")
 
 	def HSVFilter(self):
 		lower = np.array([0,0,150])
-		upper = np.array([180,30,255])
+		upper = np.array([150,30,255])
 
 		hsv = cv.cvtColor(self.image_gauss, cv.COLOR_BGR2HSV)
 		self.image_hsv = cv.inRange(hsv, lower, upper)
@@ -72,7 +74,7 @@ class ImageProcessing:
 		self.SaveImage(self.image_canny, "image_canny")
 
 	def LaneDetection(self, threshold=50):
-		lines = cv.HoughLines(self.image, 1, np.pi / 180, threshold)
+		lines = cv.HoughLines(self.image_canny, 1, np.pi / 180, threshold)
 
 		self.lines = lines
 
