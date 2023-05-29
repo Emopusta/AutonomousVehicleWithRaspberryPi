@@ -36,9 +36,9 @@ class ImageProcessing:
 		self.camera = picamera.PiCamera()
 		self.stream = picamera.array.PiRGBArray(self.camera)
 		self.camera.resolution = (320,240)
-		self.camera.brightness = 65
+		self.camera.brightness = 50
 		self.camera.framerate=32
-		#self.camera.capture("/home/emopusta/Emre/AutonomousVehicleWithRaspberryPi/deneme.jpg")
+		self.camera.capture("/home/emopusta/Emre/AutonomousVehicleWithRaspberryPi/deneme.jpg")
 
 
 
@@ -61,7 +61,7 @@ class ImageProcessing:
 
 	def HSVFilter(self):
 		lower = np.array([0,0,150])
-		upper = np.array([150,30,255])
+		upper = np.array([200,30,255])
 
 		hsv = cv.cvtColor(self.image_gauss, cv.COLOR_BGR2HSV)
 		self.image_hsv = cv.inRange(hsv, lower, upper)
@@ -114,18 +114,21 @@ class ImageProcessing:
 
 			if labels[i]==0:
 				self.DrawHoughLines(rho,theta,(0,255,0))
-				right_side_cluster.append((theta,rho))
+				right_side_cluster.append((rho, theta))
 			else:
 				self.DrawHoughLines(rho,theta,(0,0,255))
-				left_side_cluster.append((theta,rho))
+				left_side_cluster.append((rho, theta))
 
 
 		self.averaged_right = np.average(right_side_cluster, axis=0)
 		self.averaged_left = np.average(left_side_cluster, axis=0)
 		self.total = [self.averaged_left,self.averaged_right]
-		self.DrawHoughLines(self.averaged_right[0],self.averaged_right[1])
-		self.DrawHoughLines(self.averaged_left[0],self.averaged_left[1])
+		self.DrawHoughLines(self.averaged_right[0],self.averaged_right[1],(255,0,255))
+		self.DrawHoughLines(self.averaged_left[0],self.averaged_left[1],(0,255,255))
 		self.SaveImage(self.imageToShow, "image_to_show")
+
+
+
 
 
 
