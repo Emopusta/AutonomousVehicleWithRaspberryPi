@@ -4,9 +4,9 @@ import time
 from simple_pid import PID
 
 class PIDController:
-	kp = 14
+	kp = 2
 	#ki = 0.1
-	kd = 0.1
+	kd = 0.5
 	pid = PID(0.5, 0.1, 0.05, setpoint=0)
 	integral = 0
 
@@ -82,8 +82,8 @@ class PIDController:
 		
 		left_speed =  0.5 + output
 		right_speed =  0.5 - output
-		left_speed = (left_speed/10) + 60
-		right_speed = (right_speed/10)+ 60
+		left_speed = (left_speed/10) + 15
+		right_speed = (right_speed/10)+ 15
 		print(left_speed, right_speed)
 		self.controlLeftSide(speed=left_speed)
 		self.controlRightSide(speed=right_speed)

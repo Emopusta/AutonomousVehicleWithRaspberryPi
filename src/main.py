@@ -33,7 +33,9 @@ def main(argv):
 
 			imageProcessing.BGRtoGrayScale()
 
-			imageProcessing.cannyEdgeDetection(150,150)
+			
+
+			imageProcessing.cannyEdgeDetection(70,150)
 			
 
 
@@ -44,7 +46,7 @@ def main(argv):
 
 			pidController.getMotorParametersWithError(imageProcessing.distanceBetweenStaticMiddlePointAndTrackLine)
 
-			#imageProcessing.prepareDisplayImage()
+			imageProcessing.prepareDisplayImage()
 
 			endTime = time.time()
 

@@ -65,8 +65,8 @@ class ImageProcessing:
 			self.isClustered = False
 			self.drawHoughLinesMiddle(self.kmeans_lines[0], self.kmeans_lines[1])
 
-		#for i in self.lines:
-			#self.drawHoughLinesRaw(i[0][0],i[0][1])
+		for i in self.lines:
+			self.drawHoughLinesRaw(i[0][0],i[0][1])
 		self.drawHoughLines(self.averaged_right[0],self.averaged_right[1])
 		self.drawHoughLines(self.averaged_left[0],self.averaged_left[1])
 		self.saveShowImage()
