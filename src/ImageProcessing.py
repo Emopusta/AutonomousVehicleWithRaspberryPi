@@ -29,7 +29,7 @@ class ImageProcessing:
 
 
 
-	def __init__(self, imagePath):
+	def __init__(self):
 
 		self.camera = picamera.PiCamera()
 		self.stream = picamera.array.PiRGBArray(self.camera)
