@@ -4,9 +4,9 @@ import time
 from simple_pid import PID
 
 class PDController:
-	kp = 42
+	kp = 30
 	kd = 0.5
-	speed = 30
+	speed = 35
 
 
 	def __init__(self, error, dutyCycle):

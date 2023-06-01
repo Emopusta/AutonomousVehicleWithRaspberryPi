@@ -148,8 +148,8 @@ class ImageProcessing:
 
 
 		elif self.left_lines is None and self.right_lines is None:
-			self.left_lines= np.array([[[1,np.pi*2+np.pi*2/36]]])
-			self.right_lines= np.array([[[319,np.pi*2-np.pi*2/36]]])
+			self.left_lines= np.array([[[1,np.pi*2+np.pi*2/27]]])
+			self.right_lines= np.array([[[319,np.pi*2-np.pi*2/27]]])
 
 		elif self.left_lines is None:
 			print("sol taraf yok")
@@ -183,11 +183,15 @@ class ImageProcessing:
 				print("not drawn : rho : ", rho , ", theta :", theta)
 			else:
 				left_features.append([[rho, theta]])
-				self.DrawHoughLines(i[0][0],i[0][1], (255,100,100))
+				self.DrawHoughLines(i[0][0],i[0][1], (255,0,0))
 			print(i)
 			left_counter+=1
-		
-		self.left_lines = np.array(left_features)
+
+		if len(left_features)!=0:
+			self.left_lines = np.array(left_features)
+		else:
+			self.left_lines= np.array([[[1,np.pi*2+np.pi*2/27]]])
+
 		print("right=>")
 		for i in self.right_lines:
 			rho,theta = i[0]
@@ -197,11 +201,17 @@ class ImageProcessing:
 				print("not drawn : rho : ", rho , ", theta :", theta)
 			else:
 				right_features.append([[rho, theta]])
-				self.DrawHoughLines(i[0][0],i[0][1], (100,10,200))
+				self.DrawHoughLines(i[0][0],i[0][1], (255,200,200))
 			print(i)
 			right_counter+=1
 
-		self.right_lines = np.array(right_features)
+		if len(right_features)!=0:
+			self.right_lines = np.array(right_features)
+		else:
+			self.right_lines= np.array([[[1,np.pi*2+np.pi*2/27]]])
+
+
+		print("--------------------------> left ", self.left_lines)
 		print("--------------------------> ", self.right_lines)
 		self.averaged_left = np.mean(self.left_lines, axis = 0)
 		self.averaged_right = np.mean(self.right_lines, axis = 0)
