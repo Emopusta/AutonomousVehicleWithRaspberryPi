@@ -6,7 +6,7 @@ from simple_pid import PID
 class PDController:
 	kp = 42
 	kd = 0.5
-	speed = 90
+	speed = 30
 
 
 	def __init__(self, error, dutyCycle):
@@ -89,7 +89,7 @@ class PDController:
 		print(left_speed, right_speed)
 		self.ControlLeftSide(speed=left_speed)
 		self.ControlRightSide(speed=right_speed)
-		time.sleep(0.35)
+		time.sleep(0.3)
 		self.StopEngines()
 		
 

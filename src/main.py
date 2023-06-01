@@ -51,8 +51,8 @@ def main(argv):
 			GPIO.cleanup()
 			return 0
 
-		except:
-			print("sıkıntı var")
+		#except:
+		#	print("sıkıntı var")
 
 	print("program sonlandi")
 	cv.waitKey()

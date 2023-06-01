@@ -6,6 +6,7 @@ import picamera.array
 import time
 from sklearn.cluster import KMeans
 
+
 class ImageProcessing:
 
 	lines = []
@@ -147,8 +148,8 @@ class ImageProcessing:
 
 
 		elif self.left_lines is None and self.right_lines is None:
-			self.left_lines= np.array([[[1,np.pi*2]]])
-			self.right_lines= np.array([[[319,np.pi*2]]])
+			self.left_lines= np.array([[[1,np.pi*2+np.pi*2/36]]])
+			self.right_lines= np.array([[[319,np.pi*2-np.pi*2/36]]])
 
 		elif self.left_lines is None:
 			print("sol taraf yok")
@@ -164,17 +165,44 @@ class ImageProcessing:
 		else :
 			print("screwed")
 
+
+		left_features = []
+		left_unchosen_index = []
+		left_counter = 0
+
+		right_features= []
+		right_unchosen_index = []
+		right_counter = 0
+
 		print("left => ")
 		for i in self.left_lines:
-			self.DrawHoughLines(i[0][0],i[0][1], (255,100,100))
+			rho,theta = i[0]
+			temp = float(theta)%np.pi
+			if -0.1<temp<0.1 or temp>3.01:
+				left_unchosen_index.append(left_counter)
+				print("not drawn : rho : ", rho , ", theta :", theta)
+			else:
+				left_features.append([[rho, theta]])
+				self.DrawHoughLines(i[0][0],i[0][1], (255,100,100))
 			print(i)
+			left_counter+=1
+		
+		self.left_lines = np.array(left_features)
 		print("right=>")
 		for i in self.right_lines:
+			rho,theta = i[0]
+			temp = float(theta)%np.pi
+			if -0.1<temp<0.1 or temp>3.01:
+				right_unchosen_index.append(right_counter)
+				print("not drawn : rho : ", rho , ", theta :", theta)
+			else:
+				right_features.append([[rho, theta]])
+				self.DrawHoughLines(i[0][0],i[0][1], (100,10,200))
 			print(i)
-			self.DrawHoughLines(i[0][0],i[0][1], (100,100,255))
-		
+			right_counter+=1
 
-
+		self.right_lines = np.array(right_features)
+		print("--------------------------> ", self.right_lines)
 		self.averaged_left = np.mean(self.left_lines, axis = 0)
 		self.averaged_right = np.mean(self.right_lines, axis = 0)
 		print("************************", self.averaged_left, self.averaged_right)
