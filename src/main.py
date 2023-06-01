@@ -26,7 +26,10 @@ def main(argv):
 			if ultrasonicSensor.calculateDistance() <10:
 				break
 			"""
+
 			imageProcessing.CaptureImage()
+
+			#imageProcessing.ROI(0,240,0,315)
 
 			imageProcessing.GaussFilter()
 
@@ -34,9 +37,10 @@ def main(argv):
 
 			imageProcessing.CannyEdgeDetection(60,150)
 
-			imageProcessing.LaneDetection(50)
+			imageProcessing.LaneDetection(35)
 
-
+			pdController.GetMotorParametersWithError(imageProcessing.PDError)
+			
 			endTime = time.time()
 
 
@@ -47,8 +51,8 @@ def main(argv):
 			GPIO.cleanup()
 			return 0
 
-		#except:
-		#	print("cizgi yok")
+		except:
+			print("sıkıntı var")
 
 	print("program sonlandi")
 	cv.waitKey()

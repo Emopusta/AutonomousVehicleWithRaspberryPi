@@ -4,8 +4,10 @@ import time
 from simple_pid import PID
 
 class PDController:
-	kp = 6
-	kd = 0.1
+	kp = 42
+	kd = 0.5
+	speed = 90
+
 
 	def __init__(self, error, dutyCycle):
 		self.error = error
@@ -30,7 +32,7 @@ class PDController:
 
 
 
-	def controlLeftSide(self,speed):
+	def ControlLeftSide(self,speed):
 		if speed > 0:
 			GPIO.output(pin.in1, GPIO.LOW)
 			GPIO.output(pin.in2, GPIO.HIGH)
@@ -49,7 +51,7 @@ class PDController:
 		print("left_side -> ", speed)
 		self.p1.ChangeDutyCycle(abs(speed))
 
-	def controlRightSide(self,speed):
+	def ControlRightSide(self,speed):
 		if speed > 0:
 			GPIO.output(pin.in3, GPIO.LOW)
 			GPIO.output(pin.in4, GPIO.HIGH)
@@ -68,7 +70,10 @@ class PDController:
 		self.p2.ChangeDutyCycle(abs(speed))
 
 
-	def getMotorParametersWithError(self, newError):
+	def GetMotorParametersWithError(self, newError):
+		print("error is = ", newError)
+		newError *=-1
+		newError *=10
 
 		derivative = newError - self.error
 		self.error = newError
@@ -79,8 +84,17 @@ class PDController:
 
 		left_speed =  0.5 + output
 		right_speed =  0.5 - output
-		left_speed = (left_speed/10) + 23
-		right_speed = (right_speed/10)+ 23
+		left_speed = (left_speed/10) + self.speed
+		right_speed = (right_speed/10)+ self.speed
 		print(left_speed, right_speed)
-		self.controlLeftSide(speed=left_speed)
-		self.controlRightSide(speed=right_speed)
+		self.ControlLeftSide(speed=left_speed)
+		self.ControlRightSide(speed=right_speed)
+		time.sleep(0.35)
+		self.StopEngines()
+		
+
+	def StopEngines(self):
+		GPIO.output(pin.in1, GPIO.LOW)
+		GPIO.output(pin.in2, GPIO.LOW)
+		GPIO.output(pin.in3, GPIO.LOW)
+		GPIO.output(pin.in4, GPIO.LOW)
