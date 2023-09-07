@@ -47,8 +47,7 @@ class PDController:
 		if speed > 99:
 			speed = 99.0
 		
-
-		print("left_side -> ", speed)
+		print("Left side motor speed= ", speed)
 		self.p1.ChangeDutyCycle(abs(speed))
 
 	def ControlRightSide(self,speed):
@@ -65,13 +64,12 @@ class PDController:
 		if speed > 99:
 			speed = 99.0
 		
-
-		print("right side -> ", abs(speed))
+		print("Right side motor speed= ", abs(speed))
 		self.p2.ChangeDutyCycle(abs(speed))
 
 
 	def GetMotorParametersWithError(self, newError):
-		print("error is = ", newError)
+		print("Error is = ", newError)
 		newError *=-1
 		newError *=10
 
@@ -79,8 +77,7 @@ class PDController:
 		self.error = newError
 		output = (self.kp * newError) + (self.kd * derivative)
 
-
-		print("output of the PID -> ", output)
+		print("Output of the PID= ", output)
 
 		left_speed =  0.5 + output
 		right_speed =  0.5 - output

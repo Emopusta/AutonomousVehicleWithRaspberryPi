@@ -16,8 +16,6 @@ def main(argv):
 	ultrasonicSensor = UltrasonicSensor()
 	pdController = PDController(0, 20.0)
 
-	#imageProcessing.setStaticMiddlePoint(200,100)
-	#imageProcessing.setStaticBottomPoint(200,300)
 	while True:
 		try:
 			startTime = time.time()
@@ -45,30 +43,17 @@ def main(argv):
 
 
 			print("cycle time = ", endTime-startTime)
-			print("*******************************")
 
 		except KeyboardInterrupt:
 			GPIO.cleanup()
 			return 0
 
-		#except:
-		#	print("sıkıntı var")
+		except:
+			print("Something happening!")
 
-	print("program sonlandi")
+	print("Exiting Program...")
 	cv.waitKey()
 	return 0
-
-
-
-
-
-
-
-
-
-
-
-
 
 if __name__ == "__main__":
 	main(sys.argv[1:])

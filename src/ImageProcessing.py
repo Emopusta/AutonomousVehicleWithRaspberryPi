@@ -60,7 +60,7 @@ class ImageProcessing:
 		self.camera.resolution = (320,240)
 		self.camera.brightness = 72
 		self.camera.framerate=32
-		self.camera.capture("/home/emopusta/Emre/AutonomousVehicleWithRaspberryPi/deneme.jpg")
+		self.camera.capture("/home/emopusta/Emre/AutonomousVehicleWithRaspberryPi/init.jpg")
 
 
 
@@ -143,7 +143,7 @@ class ImageProcessing:
 		
 		
 		if self.left_lines is not  None and self.right_lines is not None:
-			print("problem yok")
+			print("Succeed.")
 			pass
 
 
@@ -152,18 +152,18 @@ class ImageProcessing:
 			self.right_lines= np.array([[[319,np.pi*2-np.pi*2/27]]])
 
 		elif self.left_lines is None:
-			print("sol taraf yok")
+			print("Left line not detected.")
 			x = np.mean(self.right_lines, axis = 0)
 			r,t = x[0]
 			self.left_lines = np.array([[[r,t]]])
 
 		elif self.right_lines is None:
-			print("sag taraf yok")
+			print("Right line not detected.")
 			x = np.mean(self.left_lines, axis = 0)
 			r,t = x[0]
 			self.right_lines = np.array([[[r,t]]])
 		else :
-			print("screwed")
+			print("Failed.")
 
 
 		left_features = []
@@ -174,7 +174,6 @@ class ImageProcessing:
 		right_unchosen_index = []
 		right_counter = 0
 
-		print("left => ")
 		for i in self.left_lines:
 			rho,theta = i[0]
 			temp = float(theta)%np.pi
@@ -184,7 +183,6 @@ class ImageProcessing:
 			else:
 				left_features.append([[rho, theta]])
 				self.DrawHoughLines(i[0][0],i[0][1], (255,0,0))
-			print(i)
 			left_counter+=1
 
 		if len(left_features)!=0:
@@ -192,7 +190,6 @@ class ImageProcessing:
 		else:
 			self.left_lines= np.array([[[1,np.pi*2+np.pi*2/27]]])
 
-		print("right=>")
 		for i in self.right_lines:
 			rho,theta = i[0]
 			temp = float(theta)%np.pi
@@ -202,7 +199,6 @@ class ImageProcessing:
 			else:
 				right_features.append([[rho, theta]])
 				self.DrawHoughLines(i[0][0],i[0][1], (255,200,200))
-			print(i)
 			right_counter+=1
 
 		if len(right_features)!=0:
@@ -210,41 +206,29 @@ class ImageProcessing:
 		else:
 			self.right_lines= np.array([[[1,np.pi*2+np.pi*2/27]]])
 
-
-		print("--------------------------> left ", self.left_lines)
-		print("--------------------------> ", self.right_lines)
 		self.averaged_left = np.mean(self.left_lines, axis = 0)
 		self.averaged_right = np.mean(self.right_lines, axis = 0)
-		print("************************", self.averaged_left, self.averaged_right)
+
 		self.DrawHoughLines(self.averaged_left[0][0],self.averaged_left[0][1],(255,0,0))
 		self.DrawHoughLines(self.averaged_right[0][0],self.averaged_right[0][1],(0,255,0))
 
 		cv.line(self.image, (-500,180), (500,180),(60,20,100),7)
 		cv.line(self.image, (-500,50), (500,50),(60,20,100),7)
-		print("--------",self.averaged_left, "-----", self.averaged_right)
+
 		self.SetLeftLinePoints(self.averaged_left[0][0],self.averaged_left[0][1])
 		self.SetRightLinePoints(self.averaged_right[0][0],self.averaged_right[0][1])
 
-		print("asdasd ",self.left_point_upper,self.left_point_lower)
-
 		self.FindLeftIntersectionPoint(self.left_point_upper,self.left_point_lower,180,50)
 		self.FindRightIntersectionPoint(self.right_point_upper,self.right_point_lower,180,50)
-		print(self.left_point_upper_intersection , self.right_point_upper_intersection,	self.left_point_lower_intersection, self.right_point_lower_intersection)
-		
+			
 		self.SetMidPoints()
-		print("upper mid point: ", self.mid_point_upper)
-		print("lower mid point: ", self.mid_point_lower)
-		#self.PDError = (self.mid_point_upper[1]-self.mid_point_lower[1])/(self.mid_point_upper[0]-self.mid_point_lower[0])
 		self.PDError = (self.mid_point_upper[0]-self.mid_point_lower[0])/(self.mid_point_upper[1]-self.mid_point_lower[1])
-		print(self.PDError)
+		print("PDError value= ", self.PDError)
 
 		self.SaveImage(self.imageToShow, "imageToShow")
 
-
 	def FindLeftIntersectionPoint(self, point1, point2, y1, y2):
 		m = (point1[1]-point2[1])/(point1[0]-point2[0])
-		print("point1 = ", point1)
-		print("point2 = ", point2)
 		if m == 0:
 			m = 1
 		n = point1[1]-(m*point1[0])
@@ -258,15 +242,11 @@ class ImageProcessing:
 
 	def FindRightIntersectionPoint(self, point1, point2, y1, y2):
 		m = (point1[1]-point2[1])/(point1[0]-point2[0])
-		print("point1 = ", point1)
-		print("point2 = ", point2)
 		if m == 0:
 			m = 1
 		n = point1[1]-(m*point1[0])
-		print("x1 = ", round((y1-n)/m))
 		x1 = int((y1-n)/m)
 		x2 = int((y2-n)/m)
-		print("x1 , x2 = ", x1, x2)
 		cv.circle(self.imageToShow, (x1,y1) , 3, (0,0, 255),-1)
 		cv.circle(self.imageToShow, (x2,y2) , 3, (0,0, 255),-1)
 		
@@ -280,8 +260,6 @@ class ImageProcessing:
 		y0 = b * rho
 		self.left_point_upper = np.array([int(x0 + 1000*(-b)), int(y0 + 1000*(a))])
 		self.left_point_lower = np.array([int(x0 - 1000*(-b)), int(y0 - 1000*(a))])
-		#cv.circle(self.imageToShow, self.left_point_upper, 3, (0,0, 255),-1)
-		#cv.circle(self.imageToShow, self.right_point_upper, 3, (0,0, 255),-1)
 
 	def SetRightLinePoints(self, rho, theta):
 		a = math.cos(theta)
@@ -290,15 +268,11 @@ class ImageProcessing:
 		y0 = b * rho
 		self.right_point_upper = np.array([int(x0 + 1000*(-b)), int(y0 + 1000*(a))])
 		self.right_point_lower = np.array([int(x0 - 1000*(-b)), int(y0 - 1000*(a))])
-		#cv.circle(self.imageToShow, self.left_point_upper, 3, (0,0, 255),-1)
-		#cv.circle(self.imageToShow, self.right_point_upper, 3, (0,0, 255),-1)
-
 
 	def SetMidPoints(self):
 		self.mid_point_upper = (int((self.left_point_upper_intersection[0] + self.right_point_upper_intersection[0])/2),int((self.left_point_upper_intersection[1] + self.right_point_upper_intersection[1])/2))
 		self.mid_point_lower = ( int( (self.left_point_lower_intersection[0] + self.right_point_lower_intersection[0])/2),int((self.left_point_lower_intersection[1] + self.right_point_lower_intersection[1])/2))
 
-		print("---------> ", self.mid_point_upper, self.mid_point_lower)
 		cv.circle(self.imageToShow, self.mid_point_upper, 3, (0,0, 255),-1)
 		cv.circle(self.imageToShow, self.mid_point_lower, 3, (0,0, 255),-1)
 

@@ -25,5 +25,5 @@ class UltrasonicSensor:
 		ptt = echoStopTime - echoStartTime
 		distance = 1234.367 * ptt * 5280 * 12 / 3600
 		self.distance = distance
-		print("Ultrasonic distance -> ", distance)
+		print("Ultrasonic sensor calculated distance -> ", distance)
 		return distance
