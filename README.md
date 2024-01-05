@@ -12,6 +12,6 @@ Bu projede kullanılan Raspberry pi içerisindeki tüm kodlara bu repository üz
 
 ## Kaynaklar
 
-- Projenin makalesi ve sunumuna [buradan](https://drive.google.com/drive/folders/1qV_GMkhuxvjyPc0pHqFIi5WvRd5EmGyV?usp=sharing) ulaşabilirsiniz.
+- Projenin makalesi ve sunumuna [buradan](https://drive.google.com/drive/folders/1IATI180S61axyxUHYXYXG6Tw3CHCJ8H8?usp=sharing) ulaşabilirsiniz.
 - Projenin sunum youtube videosuna [buradan](https://www.youtube.com/watch?v=nQ503lxVw8E) ulaşabilirsiniz.
 
